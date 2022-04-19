@@ -1,4 +1,4 @@
-# Newsworthy
+# Quizzical
 
 <img width="1280" alt="Screen Shot 2022-04-19 at 10 33 53 AM" src="https://user-images.githubusercontent.com/32519084/164029390-89caa59f-3d69-4140-b6dd-f6558b1e18e7.png">
 
