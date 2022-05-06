@@ -13,9 +13,25 @@ body {
 
 /* QUIZZICAL */
 
+.main {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .container {
   margin: 50px auto;
   max-width: 700px;
+}
+
+.header-primary {
+  font-size: 80px;
+}
+
+.header-secondary {
+  font-size: 20px;
 }
 
 .start-btn {
@@ -24,7 +40,7 @@ body {
   background-color: #4d5b9e;
   padding: 16px 48px;
   border-radius: 10px;
-  margin-top: 40px;
+  margin-top: 20px;
   font-family: "Inter", sans-serif;
   cursor: pointer;
 }
