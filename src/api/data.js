@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 
 const generateState = () => {
   const quiz = fetch(
-    "https://opentdb.com/api.php?amount=5&category=14&difficulty=easy&type=multiple&encode=base64"
+    "https://opentdb.com/api.php?amount=5&type=multiple&encode=base64"
   )
     .then((res) => res.json())
     .then((data) =>
