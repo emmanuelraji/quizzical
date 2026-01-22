@@ -25,7 +25,6 @@ function normalizeQuestions(apiQuestions) {
         id: nanoid(),
         text: decode(question.correct_answer),
         isSelected: false,
-        isCorrect: true,
       },
     ];
 
