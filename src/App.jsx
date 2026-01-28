@@ -1,45 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { clsx } from "clsx";
 import fetchQuestions from "./lib/fetchQuestions";
 
 import "./App.css";
 
 import Start from "./components/Start";
+import Quiz from "./components/Quiz";
+import Spinner from "./components/Spinner";
 
 function App() {
   const [questions, setQuestions] = useState(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const correctAnswers = questions?.map((question) => question.correct_answer);
   const userAnswers = questions?.map((question) => {
-    return question.answer_choices?.find((choice) => choice.isSelected);
+    return question.answer_choices?.find((choice) => choice.selected);
   });
-
-  console.log(correctAnswers);
-  console.log(userAnswers);
-  console.log(questions);
 
   useEffect(() => {
     loadQuestions();
   }, []);
 
   async function loadQuestions() {
+    setIsLoading(true);
     const trivia = await fetchQuestions();
     setQuestions(trivia);
+    setIsLoading(false);
   }
 
   function selectAnswerChoice(questionId, choiceId) {
     setQuestions((questions) => {
       return questions.map((question) => {
         if (question.id == questionId) {
-          console.log("matched");
           return {
             ...question,
             answer_choices: question.answer_choices.map((choice) =>
               choice.id === choiceId
-                ? { ...choice, isSelected: !choice.isSelected }
-                : { ...choice, isSelected: false },
+                ? { ...choice, selected: !choice.selected }
+                : { ...choice, selected: false },
             ),
           };
         }
@@ -48,14 +47,20 @@ function App() {
     });
   }
 
-  function startNewGame() {
+  function startNewQuiz() {
+    setIsGameOver(false);
     loadQuestions();
-    setTimeout(() => {
-      setIsGameOver(false);
-    }, 300);
+  }
+
+  function startQuiz() {
+    setIsInitialLoad(false);
   }
 
   function renderGameButton() {
+    const incorrectAnswers = userAnswers?.filter((choice) =>
+      correctAnswers.includes(choice?.text),
+    ).length;
+
     if (!isGameOver) {
       return (
         <button
@@ -66,43 +71,28 @@ function App() {
         </button>
       );
     }
+
     return (
       <React.Fragment>
-        <p>You scored {} correct answers</p>
-        <button onClick={startNewGame}>Play again</button>
+        <p>{`You scored ${incorrectAnswers} out of ${correctAnswers.length} correct answers`}</p>
+        <button onClick={startNewQuiz}>Play again</button>
       </React.Fragment>
     );
   }
 
   return (
     <React.Fragment>
-      {isInitialLoad && <Start />}
-      <div>
-        {questions?.map((question, index) => (
-          <React.Fragment key={index}>
-            <h2>{question.question}</h2>
-            <div className="answer-choices">
-              {question.answer_choices?.map((choice, index) => {
-                const isCorrect = correctAnswers.includes(choice.text);
-                return (
-                  <button
-                    key={index}
-                    className={clsx({
-                      selected: choice.isSelected,
-                      correct: isCorrect && isGameOver,
-                      incorrect: !isCorrect && isGameOver && choice.isSelected,
-                    })}
-                    onClick={() => selectAnswerChoice(question.id, choice.id)}
-                  >
-                    {choice.text}
-                  </button>
-                );
-              })}
-            </div>
-          </React.Fragment>
-        ))}
-      </div>
-      {renderGameButton()}
+      {isInitialLoad && <Start startQuiz={startQuiz} />}
+      {isLoading && <Spinner />}
+      {!isLoading && !isInitialLoad && (
+        <Quiz
+          questions={questions}
+          correctAnswers={correctAnswers}
+          isGameOver={isGameOver}
+          selectAnswerChoice={selectAnswerChoice}
+          renderGameButton={renderGameButton}
+        />
+      )}
     </React.Fragment>
   );
 }
