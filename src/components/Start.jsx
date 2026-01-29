@@ -1,11 +1,11 @@
-import React from "react";
-
-export default function Home() {
+function Start({ startQuiz }) {
   return (
-    <main>
+    <section>
       <h1>Quizzical</h1>
       <p>Some description if needed</p>
-      <button>Start quiz</button>
-    </main>
+      <button onClick={startQuiz}>Start quiz</button>
+    </section>
   );
 }
+
+export default Start;

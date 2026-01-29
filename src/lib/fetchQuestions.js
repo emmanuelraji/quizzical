@@ -19,17 +19,17 @@ function normalizeQuestions(apiQuestions) {
       ...question.incorrect_answers.map((choice) => ({
         id: nanoid(),
         text: decode(choice),
-        isSelected: false,
+        selected: false,
       })),
       {
         id: nanoid(),
         text: decode(question.correct_answer),
-        isSelected: false,
+        selected: false,
       },
     ];
 
     return {
-      id: nanoid(5),
+      id: nanoid(),
       category: question.category,
       question: decode(question.question),
       correct_answer: decode(question.correct_answer),
