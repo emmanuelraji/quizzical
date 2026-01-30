@@ -80,17 +80,19 @@ function Quiz() {
       {loading ? (
         <Spinner />
       ) : (
-        questions?.map((question) => (
-          <Question
-            key={question.id}
-            question={question}
-            correctAnswers={correctAnswers}
-            selectAnswerChoice={selectAnswerChoice}
-            isGameOver={isGameOver}
-          />
-        ))
+        <React.Fragment>
+          {questions?.map((question) => (
+            <Question
+              key={question.id}
+              question={question}
+              correctAnswers={correctAnswers}
+              selectAnswerChoice={selectAnswerChoice}
+              isGameOver={isGameOver}
+            />
+          ))}
+          {renderGameButton()}
+        </React.Fragment>
       )}
-      {!loading && renderGameButton()}
     </main>
   );
 }
